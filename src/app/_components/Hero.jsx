@@ -8,7 +8,7 @@ const Hero = () => {
       {/* Fallback image */}
       <div
         className="absolute top-0 left-0 w-full h-full bg-cover bg-center bg-no-repeat z-0"
-        style={{ backgroundImage: "url(../../assets/img.png)" }}
+        style={{ backgroundImage: "url(/img.png)" }}
       >
         {/* Overlay to darken the image/video */}
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
@@ -31,7 +31,10 @@ const Hero = () => {
         playsInline
         className="absolute top-0 left-0 w-full h-full object-cover z-0"
       >
-        <source src="/vid.MP4" type="video/mp4" />
+        <source
+          src="https://res.cloudinary.com/dtztxlz65/video/upload/v1722583827/oa2yk6pxyos55mjzya2e.mp4"
+          type="video/mp4"
+        />
         Your browser does not support the video tag.
       </video>
 
