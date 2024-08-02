@@ -32,7 +32,7 @@ const Hero = () => {
         className="absolute top-0 left-0 w-full h-full object-cover z-0"
       >
         <source
-          src="https://res.cloudinary.com/dtztxlz65/video/upload/v1722583827/oa2yk6pxyos55mjzya2e.mp4"
+          src="https://res.cloudinary.com/dtztxlz65/video/upload/v1722584351/bmj9adurjauwguwwav2r.mp4"
           type="video/mp4"
         />
         Your browser does not support the video tag.
