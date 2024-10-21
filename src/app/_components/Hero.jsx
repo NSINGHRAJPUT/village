@@ -1,6 +1,6 @@
-// components/Hero.js
 import Link from "next/link";
 import React from "react";
+import Header from "./Header";
 
 const Hero = () => {
   return (
@@ -14,13 +14,8 @@ const Hero = () => {
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
       </div>
 
-      <div className="absolute z-50  top-[2%] right-[1%] w-fit ">
-        <Link
-          href={"/login"}
-          className="px-6 py-2.5 ring-1 ring-white hover:ring-transparent  text-black text-xl font-bold tracking-widest hover:bg-gradient-to-r from-[#50bd08] to-blue-800 transition duration-100 ease-in-out "
-        >
-          LOGIN
-        </Link>
+      <div className="absolute z-50 top-[0%] left-[0%] w-full">
+        <Header />
       </div>
 
       {/* Background video */}
@@ -39,7 +34,7 @@ const Hero = () => {
       </video>
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center md:mt-48">
         <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold text-white mb-4">
           Your Hero Heading
         </h1>
