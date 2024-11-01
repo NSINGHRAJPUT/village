@@ -1,5 +1,6 @@
 import axios from "axios";
 import FamilyPage from "./Family.jsx";
+import Footer from "../_components/Footer.jsx";
 
 async function fetchFamilies() {
   try {
@@ -17,5 +18,8 @@ async function fetchFamilies() {
 
 export default async function Page() {
   const familiesData = await fetchFamilies();
-  return <FamilyPage families={familiesData} />;
+  return <>
+    <FamilyPage families={familiesData} />
+    <Footer />
+  </>;
 }

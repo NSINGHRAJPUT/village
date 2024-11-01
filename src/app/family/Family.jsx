@@ -5,6 +5,7 @@ import Header from "../_components/Header";
 import img from "../../assets/rajput.jpg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import village from '../../assets/village.png'
 
 export default function FamilyPage({ families }) {
   const router = useRouter();
@@ -27,18 +28,22 @@ export default function FamilyPage({ families }) {
       <div className="absolute z-50 top-[0%] left-[0%] w-full text-white">
         <Header />
       </div>
-      {/* Hero Section */}
-      <div
-        className="text-white py-16 px-4 text-center min-h-[60vh] pt-[15vh] bg-gray-400"
-        style={{ backgroundImage: `url(${img})` }}
-      >
-        <h1 className="text-4xl font-bold mb-4">Find Your Family</h1>
-        <p className="text-xl mb-8">Search for family members by caste</p>
+      <div className="relative text-white py-16 px-4 text-center min-h-[90vh] pt-[15vh]">
+        <Image
+          src={village}
+          alt="Village Background"
+          layout="fill"
+          objectFit="cover"
+          className="z-[-1]" // To make sure it sits behind other content
+        />
+         <div className="absolute z-10 top-0 left-0 w-full h-full bg-green-300 opacity-50 text-white"></div>
+        <h1 className="text-4xl relative z-20 mt-16 font-bold mb-4">Find Your Family</h1>
+        <p className="text-xl relative z-20 mb-8">Search for family members by caste</p>
         <input
           type="text"
           value={searchQuery}
           onChange={handleSearch}
-          className="p-2 rounded border outline-none border-gray-300 text-black"
+          className="p-2 relative z-20 rounded border outline-none border-gray-300 text-black"
           placeholder="Search by caste"
         />
       </div>

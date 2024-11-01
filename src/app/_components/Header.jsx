@@ -12,18 +12,20 @@ export default function Header() {
         </div>
         {/* Navigation Links */}
         <nav>
-          <ul className="flex space-x-4">
-            <li>
-              <Link href="/login" className="text-gray-600 hover:text-blue-500">
-                Login
+          <ul className="flex space-x-4 font-bold">
+          <li>
+              <Link href="/gallery" className="text-gray-600 hover:text-blue-500">
+                Gallery
               </Link>
             </li>
             <li>
-              <Link
-                href="/family"
-                className="text-gray-600 hover:text-blue-500"
-              >
-                Family
+              <Link href="/about" className="text-gray-600 hover:text-blue-500">
+                About Us
+              </Link>
+            </li>
+            <li>
+              <Link href="/login" className="text-gray-600 hover:text-blue-500">
+                Login
               </Link>
             </li>
           </ul>
