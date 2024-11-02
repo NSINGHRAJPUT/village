@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/dbconfig/db";
-import Caste from "@/model/caste";
+import Caste from "@/model/Caste";
 // import Family from "@/model/family";
 // import FamilyMember from "@/model/familyMember";
 
