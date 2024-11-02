@@ -14,6 +14,11 @@ export default function Header() {
         <nav>
           <ul className="flex space-x-4 font-bold">
           <li>
+              <Link href="/family" className="text-gray-600 hover:text-blue-500">
+                family
+              </Link>
+            </li>
+          <li>
               <Link href="/gallery" className="text-gray-600 hover:text-blue-500">
                 Gallery
               </Link>

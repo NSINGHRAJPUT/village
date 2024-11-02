@@ -13,16 +13,27 @@ export default function SpecificFamily() {
     if (typeof window !== "undefined") {
       const storedFamily = localStorage.getItem("selectedFamily");
       if (storedFamily) {
-        setFamily(JSON.parse(storedFamily));
+        const data = JSON.parse(storedFamily);
+        console.log(data)
+        setFamily(data);
         console.log("Stored Family:", storedFamily);
       } else {
-        router.push("/family");
+        router.push("/specificcaste");
       }
     }
   }, [router]);
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
+  };
+
+  const handleMemberClick = (member) => {
+    // Save the selected family to local storage
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selectedMember", JSON.stringify({...member, caste: family?.caste}));
+    }
+    // Navigate to the specific family page
+    router.push("/specificmember");
   };
 
   return (
@@ -48,23 +59,24 @@ export default function SpecificFamily() {
       {/* Family Members Section */}
       <div className="max-w-7xl mx-auto py-8 px-4">
         <h2 className="text-3xl font-semibold mb-6">
-          Members of {family?.caste}
+          Members of {family?.familyName[0]}
         </h2>
-        {family?.members?.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {family.members
+        {family?.members[0]?.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" >
+            {family.members[0]
               .filter((member) =>
                 member.name.toLowerCase().includes(searchQuery.toLowerCase())
               )
               .map((member, index) => (
                 <div
                   key={member._id}
-                  className="p-4 bg-white shadow rounded-lg"
+                  className="p-4 bg-white cursor-pointer shadow rounded-lg"
+                  onClick={() => handleMemberClick(member)}
                 >
                   <h2 className="text-xl font-semibold mb-2">{member.name}</h2>
-                  <p className="text-gray-700">Age: {member.age}</p>
+                  <p className="text-gray-700">Age: {member.dob}</p>
                   <p className="text-gray-700">Mobile: {member.mobile}</p>
-                  <p className="text-gray-700">Caste: {member.caste}</p>
+                  <p className="text-gray-700">Caste: {family.caste}</p>
                   <img
                     src={member.photo}
                     alt={`${member.name}'s photo`}

@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import village from '../../assets/village.png'
 
 export default function FamilyPage({ families }) {
+  console.log(families);
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const handleSearch = (event) => {
@@ -18,10 +19,10 @@ export default function FamilyPage({ families }) {
   const handleFamilyClick = (family) => {
     // Save the selected family to local storage
     if (typeof window !== "undefined") {
-      localStorage.setItem("selectedFamily", JSON.stringify(family));
+      localStorage.setItem("selectedCaste", JSON.stringify(family));
     }
     // Navigate to the specific family page
-    router.push("/specificfamily");
+    router.push("/specificcaste");
   };
   return (
     <div className="min-h-screen relative">
@@ -54,10 +55,10 @@ export default function FamilyPage({ families }) {
         {families?.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {families
-              .filter((family) =>
-                family.caste.toLowerCase().includes(searchQuery.toLowerCase())
+              ?.filter((family) =>
+                family.casteName.toLowerCase().includes(searchQuery.toLowerCase())
               )
-              .map((family, index) => (
+              ?.map((family, index) => (
                 <div
                   key={index}
                   onClick={() => handleFamilyClick(family)}
@@ -65,14 +66,15 @@ export default function FamilyPage({ families }) {
                 >
                   <Image
                     src={img || "/path/to/placeholder.jpg"}
-                    alt={family.caste}
+                    alt={family.casteName}
                     className="w-full h-40 object-cover"
+                    objectFit="contain"
                   />
                   <div className="p-4">
-                    <h3 className="text-xl font-semibold">{family.caste}</h3>
+                    <h3 className="text-xl font-semibold">{family.casteName}</h3>
                     <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs font-bold rounded-full px-2 py-1">
-                      {family.membersCount}{" "}
-                      {family.membersCount > 1 ? "families" : "family"}
+                      {family.families?.length}{" "}
+                      {family.families?.length > 1 ? "families" : "family"}
                     </div>
                   </div>
                 </div>

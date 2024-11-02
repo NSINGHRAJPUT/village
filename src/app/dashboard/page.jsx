@@ -20,13 +20,19 @@ export default function Dashboard() {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [familyMembers, setFamilyMembers] = useState([]);
+  const [family, setFamily] = useState(null);
+  const [Caste, setCaste] = useState([]);
 
   useEffect(() => {
     const fetchFamilyMembers = async () => {
       try {
         const response = await axios.get(`/api/family`);
+        console.log(response);
+
         if (response.status === 200) {
-          setFamilyMembers(response.data.data.familyMembers);
+          setFamilyMembers(response.data.data.members);
+          setCaste(response.data.data.caste.name);
+          setFamily(response.data.data.familyName)
         }
       } catch (error) {
         console.error("Error fetching family members:", error);
@@ -60,14 +66,14 @@ export default function Dashboard() {
             <ul>
               {[
                 { name: "Dashboard", icon: <FaHome /> },
-                { name: "Education", icon: <FaSchool /> },
+                {/* { name: "Education", icon: <FaSchool /> },
                 { name: "Event", icon: <FaCalendar /> },
                 { name: "Bank Credit", icon: <FaCreditCard /> },
                 { name: "Financial", icon: <FaMoneyBill /> },
                 { name: "Certificates", icon: <FaFile /> },
                 { name: "Own Finance", icon: <FaBalanceScale /> },
-                { name: "Settings", icon: <FaCog /> },
-                { name: "Post Job", icon: <FaSignOutAlt /> },
+                { name: "Settings", icon: <FaCog /> }, */},
+                { name: "Post Job", icon: <FaFile /> },
               ].map((item) => (
                 <li key={item.name} className="mb-2">
                   <a
@@ -112,9 +118,9 @@ export default function Dashboard() {
             searchResults.map((member) => (
               <div key={member._id} className="p-4 bg-white shadow rounded-lg">
                 <h2 className="text-xl font-semibold mb-2">{member.name}</h2>
-                <p className="text-gray-700">Age: {member.age}</p>
+                <p className="text-gray-700">Age: {member.dob}</p>
                 <p className="text-gray-700">Mobile: {member.mobile}</p>
-                <p className="text-gray-700">Caste: {member.caste}</p>
+                <p className="text-gray-700">Caste: {Caste}</p>
                 <img
                   src={member.photo}
                   alt={`${member.name}'s photo`}
@@ -126,9 +132,9 @@ export default function Dashboard() {
             familyMembers.map((member) => (
               <div key={member._id} className="p-4 bg-white shadow rounded-lg">
                 <h2 className="text-xl font-semibold mb-2">{member.name}</h2>
-                <p className="text-gray-700">Age: {member.age}</p>
+                <p className="text-gray-700">Age: {member.dob}</p>
                 <p className="text-gray-700">Mobile: {member.mobile}</p>
-                <p className="text-gray-700">Caste: {member.caste}</p>
+                <p className="text-gray-700">Caste: {Caste}</p>
                 <img
                   src={member.photo}
                   alt={`${member.name}'s photo`}
