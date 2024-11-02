@@ -5,7 +5,7 @@ import Footer from "../_components/Footer.jsx";
 async function fetchFamilies() {
   try {
     const response = await axios.get(
-      "http://localhost:3000/api/getAllCasteFamilies"
+      `${process.env.BASE_URL}/api/getAllCasteFamilies`
     );
     if (response.status === 200) {
       return response.data.data;

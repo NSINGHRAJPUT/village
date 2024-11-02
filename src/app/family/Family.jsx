@@ -27,7 +27,7 @@ export default function FamilyPage({ families }) {
   useEffect(() => {
     const getFamilies = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/getAllCasteFamilies");
+        const response = await fetch("api/getAllCasteFamilies");
         const data = await response.json();
         console.log(data)
       } catch (error) {
