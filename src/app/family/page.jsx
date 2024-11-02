@@ -10,7 +10,6 @@ async function fetchFamilies() {
     if (response.status === 200) {
       return response.data.data;
     }
-    console.log(response);
   } catch (error) {
     console.error("Error fetching family data:", error);
     return [];

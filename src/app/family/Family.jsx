@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../_components/Header";
 import img from "../../assets/rajput.jpg";
 import Image from "next/image";
@@ -8,13 +8,11 @@ import { useRouter } from "next/navigation";
 import village from '../../assets/village.png'
 
 export default function FamilyPage({ families }) {
-  console.log(families);
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
   };
-  console.log(families);
   // Handle selecting a specific family and saving it to local storage
   const handleFamilyClick = (family) => {
     // Save the selected family to local storage
@@ -24,6 +22,21 @@ export default function FamilyPage({ families }) {
     // Navigate to the specific family page
     router.push("/specificcaste");
   };
+
+
+  useEffect(() => {
+    const getFamilies = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/getAllCasteFamilies");
+        const data = await response.json();
+        console.log(data)
+      } catch (error) {
+        console.error("Error fetching family data:", error);
+      }
+    }
+  },[])
+
+  
   return (
     <div className="min-h-screen relative">
       <div className="absolute z-50 top-[0%] left-[0%] w-full text-white">
