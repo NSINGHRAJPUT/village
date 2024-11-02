@@ -34,6 +34,7 @@ export default function FamilyPage({ families }) {
         console.error("Error fetching family data:", error);
       }
     }
+    getFamilies()
   },[])
 
   
