@@ -18,10 +18,10 @@ const About = () => {
 
       {/* Text content */}
       <div className="text-center md:text-left max-w-md">
-        <h2 className="text-2xl md:text-3xl font-semibold text-green-700 mb-4">
+        <h2 className="text-3xl text-center md:text-4xl font-bold text-primary mb-4 font-karma">
           About Us
         </h2>
-        <p className="text-gray-700 leading-relaxed">
+        <p className="text-primary font-normal leading-2 text-center">
           Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
           Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
           when an unknown printer took a galley of type and scrambled it to make a type 

@@ -5,7 +5,9 @@ import Header from "../_components/Header";
 import img from "../../assets/rajput.jpg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import village from '../../assets/village.png'
+import village from "../../assets/village.png";
+import About from "../_components/About";
+import { Icon } from "@iconify/react";
 
 export default function FamilyPage({ families }) {
   const router = useRouter();
@@ -23,21 +25,19 @@ export default function FamilyPage({ families }) {
     router.push("/specificcaste");
   };
 
-
   useEffect(() => {
     const getFamilies = async () => {
       try {
         const response = await fetch("api/getAllCasteFamilies");
         const data = await response.json();
-        console.log(data)
+        console.log(data);
       } catch (error) {
         console.error("Error fetching family data:", error);
       }
-    }
-    getFamilies()
-  },[])
+    };
+    getFamilies();
+  }, []);
 
-  
   return (
     <div className="min-h-screen relative">
       <div className="absolute z-50 top-[0%] left-[0%] w-full text-white">
@@ -51,9 +51,14 @@ export default function FamilyPage({ families }) {
           objectFit="cover"
           className="z-[-1]" // To make sure it sits behind other content
         />
-         <div className="absolute z-10 top-0 left-0 w-full h-full bg-green-300 opacity-50 text-white"></div>
-        <h1 className="text-4xl relative z-20 mt-16 font-bold mb-4">Find Your Family</h1>
-        <p className="text-xl relative z-20 mb-8">Search for family members by caste</p>
+        <div className="absolute z-10 top-0 left-0 w-full h-full bg-[#144F0F80] text-white"></div>
+
+        <h1 className="text-4xl relative z-20 mt-16 font-bold mb-4">
+          Find Your Family
+        </h1>
+        <p className="text-xl relative z-20 mb-8">
+          Search for family members by caste
+        </p>
         <input
           type="text"
           value={searchQuery}
@@ -64,39 +69,51 @@ export default function FamilyPage({ families }) {
       </div>
 
       {/* Castes Section */}
-      <div className="max-w-7xl mx-auto py-8 px-4">
-        <h2 className="text-3xl font-semibold mb-6">All Castes</h2>
+      <div className="mx-auto w-[90%] md:w-[85%] lg:w-[80%] py-8 px-4">
+        <h2 className="text-3xl text-center md:text-4xl break-words font-bold mb-6 text-primary font-karma">
+          Family
+        </h2>
         {families?.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {families
               ?.filter((family) =>
-                family.casteName.toLowerCase().includes(searchQuery.toLowerCase())
+                family.casteName
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase())
               )
               ?.map((family, index) => (
                 <div
                   key={index}
                   onClick={() => handleFamilyClick(family)}
-                  className="bg-white cursor-pointer rounded-lg shadow-md overflow-hidden relative"
+                  className="bg-white cursor-pointer h-40 rounded-3xl shadow-md p-2 overflow-hidden relative"
+                  style={{
+                    boxShadow:
+                      "0px 5px 4px 0px #144F0F inset, 0px 5px 4px 0px #144F0F",
+                    padding: "16px",
+                  }}
                 >
-                  <Image
-                    src={img || "/path/to/placeholder.jpg"}
-                    alt={family.casteName}
-                    className="w-full h-40 object-cover"
-                    objectFit="contain"
-                  />
-                  <div className="p-4">
-                    <h3 className="text-xl font-semibold">{family.casteName}</h3>
-                    <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs font-bold rounded-full px-2 py-1">
+                  <h3 className="text-3xl h-full font-medium text-primary font-karma flex justify-center items-center">
+                    {family.casteName}
+                  </h3>
+
+                  <div className="absolute top-3 right-3 bg-[#144F0F1A] h-11 w-11  text-xs font-bold rounded-full  flex justify-center items-center gap-1  text-primary">
+                    <span>
+                      <Icon
+                        icon="fluent:person-12-filled"
+                        className="text-lg"
+                      />
+                    </span>
+                    <span className="text-lg font-karma pt-[2px]">
                       {family.families?.length}{" "}
-                      {family.families?.length > 1 ? "families" : "family"}
-                    </div>
+                    </span>
                   </div>
                 </div>
               ))}
           </div>
         ) : (
-          <p>No families found.</p>
+        <p className="font-karma text-2xl text-primary text-center">No families found.</p>
         )}
+
       </div>
     </div>
   );

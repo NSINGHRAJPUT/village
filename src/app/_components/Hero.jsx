@@ -13,7 +13,8 @@ const Hero = () => {
 
         {/* Overlay to darken the image/video */}
       </div>
-      <div className="absolute z-10 top-0 left-0 w-full h-full bg-green-300 opacity-50 text-white"></div>
+      <div className="absolute z-10 top-0 left-0 w-full h-full bg-[#144F0F80] text-white"></div>
+
 
       <div className="absolute z-50 top-[0%] left-[0%] w-full">
         <Header />

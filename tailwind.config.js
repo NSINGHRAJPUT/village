@@ -6,7 +6,14 @@ module.exports = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+
     extend: {
+      fontFamily: {
+        karma: ["Karma", "sans-serif"], // Add the Karma font family
+      },
+      colors: {
+        primary: "#144F0F", // Define your primary color variable
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

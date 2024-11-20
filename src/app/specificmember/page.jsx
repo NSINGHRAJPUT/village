@@ -44,15 +44,16 @@ export default function Page() {
             </div>
 
             {/* Member Info */}
-            <div className="text-gray-700 text-lg font-semibold space-y-2">
-              <p>નામ :- <span className="font-normal">{member?.name}</span></p>
-              <p>સબય સાથે સબંધ :- <span className="font-normal">પોતે</span></p>
-              <p>પરણીત અથવા બિપરણીત :- <span className="font-normal">અપરશીત</span></p>
+            <div className="text-gray-700 text-lg font-karma font-semibold space-y-2">
+              <p >નામ :- <span className="font-normal">{member?.name}</span></p>
+              <p>સભ્ય સાથે સબંધ :- <span className="font-normal">પોતે</span></p>
+              <p>પરણીત / બિનપરણીત :- <span className="font-normal">અપરશીત</span></p>
               <p>જન્મતારીખ :- <span className="font-normal">{member?.dob}</span></p>
-              <p>મોશાલ શખ :- <span className="font-normal">{member?.moshal}</span></p>
-              <p>અવ્યસ :- <span className="font-normal">{member?.occupation}</span></p>
-              <p>વ્યવસાય નુ સરનામું :- <span className="font-normal">સરનામું</span></p>
-              <p>રહેણાંક સરનામું :- <span className="font-normal">સરનામું</span></p>
+              <p>મોસાળ શાખ :- <span className="font-normal">{member?.moshal}</span></p>
+              <p>અભ્યાસ :- <span className="font-normal">{member?.occupation}</span></p>
+              <p>વ્યવસાય નું સરનામું :- <span className="font-normal">સરનામું</span></p>
+              <p>રહેણાક નું સરનામું :- <span className="font-normal">સરનામું</span></p>
+              <p>મોબાઈલ નંબર :- <span className="font-normal">777777 </span></p>
               <p>બ્લડ ગુપ :- <span className="font-normal">B+</span></p>
             </div>
           </div>
