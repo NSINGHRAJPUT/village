@@ -37,8 +37,8 @@ const Hero = () => {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center md:mt-48">
-        <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold text-white mb-4">
-          Your Hero Heading
+        <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold font-karma text-white mb-4">
+          કમાલપુર 
         </h1>
         <p className="text-lg md:text-xl lg:text-2xl text-white max-w-2xl">
           Your description goes here. It should be concise and engaging, giving
