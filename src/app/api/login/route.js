@@ -38,7 +38,7 @@ export const POST = async (req) => {
     const token = jwt.sign(
       { mobile: familyMember.mobile, age: familyMember.age },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "24h" }
     );
 
     // Set the token in cookies
@@ -54,7 +54,7 @@ export const POST = async (req) => {
     const response = NextResponse.json({
       success: true,
       message: "Login successful",
-      data: { mobile: familyMember.mobile, age: familyMember.age }, // You can return more user info if needed
+      data: { mobile: familyMember.mobile, age: familyMember.age },
     });
     response.headers.set("Set-Cookie", cookie);
 

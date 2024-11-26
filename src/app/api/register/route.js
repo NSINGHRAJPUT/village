@@ -6,7 +6,7 @@ import FamilyMember from "@/model/FamilyMember";
 import cloudinary from "@/utils/Cloudnary";
 
 // This function will handle file uploads and form parsing
-async function handleFileUpload(req) {
+export async function handleFileUpload(req) {
   const formData = await req.formData();
   const members = [];
   let familyData = {};
