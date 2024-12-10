@@ -2,12 +2,21 @@
 "use client";
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 import Link from "next/link";
+import logo from "./../../assets/logo.png";
+import Image from "next/image";
+
 
 const Footer = () => {
   return (
     <footer className="bg-green-800 text-white py-4 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between rounded-t-2xl space-y-6 md:space-y-0">
       {/* Logo */}
-      <div className="text-3xl font-bold">LOGO</div>
+      <Link href="/" className="-m-1.5 p-1.5">
+            <Image
+            src={logo} // Path to the image
+            alt="logo"
+            className="h-10 w-56"
+          />
+          </Link>
 
       {/* Navigation Links */}
       <div className="flex flex-col text-center space-y-1.5 md:space-y-2 md:text-left">

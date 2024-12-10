@@ -4,12 +4,23 @@ import About from "./_components/About";
 import Footer from "./_components/Footer";
 import familyPage from "./../assets/familyPage.jpg";
 import Image from "next/image";
+import Head from "next/head";
 
 import temple from "./../assets/temple.png";
 
 export default function Home() {
   return (
     <>
+      <Head>
+        <title>Kamlapur Patel Parivar Ahmedabad </title>
+        <meta
+          name="description"
+          content="Kamalpur Patel Parivar Ahmedabad"
+        />
+        <meta name="keywords" content="Kamalpur, Kamalpur Patel Parivar, Kamalpur Ahmedabad, Kamalpur Ramalila, Kamalpur Ahmedabad, Kamalpur Ramayan, Ramayan, Ramalila, Kamalpur Patel Parivar, Kamalpur Patidar Samaj, Kamalpur Patdi, Kamalpur Navratri, Kamalpur Ahmedabad Parivar, Kamalpur Dasada" />
+        <meta name="author" content="Kamalpur Youth" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
       <Toaster />
       <Hero />
       <About />

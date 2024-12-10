@@ -2,8 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-
+import logo from "./../../assets/logo.png";
 export default function Header() {
   const navbarRef = useRef(null);  // For the mobile menu container
   const mobileMenuButtonRef = useRef(null);  // For the mobile menu toggle button
@@ -36,12 +37,16 @@ export default function Header() {
   return (
     <header className="bg-[#144F0F80]">
       <nav
-        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8"
         aria-label="Global"
       >
         <div className="flex lg:flex-1">
-          <Link href="/" className="-m-1.5 p-1.5">
-            <span className="text-4xl font-karma text-[#ffffff] font-bold">LOGO</span>
+          <Link href="/" className="-m-1.5">
+            <Image
+            src={logo} // Path to the image
+            alt="logo"
+            className="h-10 w-56"
+          />
           </Link>
         </div>
         <div className="flex lg:hidden">
