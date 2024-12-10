@@ -8,7 +8,6 @@ export const GET = async (req) => {
   try {
     await dbConnect();
 
-    // Aggregate castes with their families and family members
     const castesWithFamiliesAndMembers = await Caste.aggregate([
       // Lookup families for each caste
       {
@@ -19,8 +18,13 @@ export const GET = async (req) => {
           as: "families",
         },
       },
-      // Unwind the families array to access each family
-      { $unwind: "$families" },
+      // Use $unwind with preserveNullAndEmptyArrays to handle empty families
+      {
+        $unwind: {
+          path: "$families",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
       // Lookup family members for each family
       {
         $lookup: {
@@ -35,7 +39,15 @@ export const GET = async (req) => {
         $group: {
           _id: "$_id",
           name: { $first: "$name" },
-          families: { $push: "$families" },
+          families: {
+            $push: {
+              $cond: {
+                if: { $ifNull: ["$families._id", false] },
+                then: "$families",
+                else: [],
+              },
+            },
+          },
         },
       },
       // Project the final structure
@@ -45,16 +57,18 @@ export const GET = async (req) => {
           casteId: "$_id",
           casteName: "$name",
           families: {
-            familyId: "$families._id",
-            familyName: "$families.familyName",
-            mainPerson: "$families.mainPerson",
-            members: "$families.members",
+            $filter: {
+              input: "$families",
+              as: "family",
+              cond: { $ne: ["$$family", []] }, // Filter out placeholder empty objects
+            },
           },
         },
       },
       // Optional: Sort by caste name, or any other criteria
       { $sort: { casteName: 1 } },
     ]);
+    
 
     if (!castesWithFamiliesAndMembers.length) {
       return NextResponse.json(

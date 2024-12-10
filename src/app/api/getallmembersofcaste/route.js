@@ -10,7 +10,7 @@ export const GET = async (req) => {
     // Get the caste name from the query parameters
     const url = new URL(req.url);
     const caste = url.searchParams.get("caste");
-    console.log("caste", caste);
+    // console.log("caste", caste);
     // If no caste name is provided, return an error
     if (!caste) {
       return NextResponse.json(

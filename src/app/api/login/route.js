@@ -19,11 +19,11 @@ export const POST = async (req) => {
         { status: 400 }
       );
     }
-    console.log(mobile, age);
+    // console.log(mobile, age);
     // Find the user by mobile number and age
     const familyMember = await FamilyMember.findOne({ mobile });
     
-    console.log(familyMember);
+    // console.log(familyMember);
     if (!familyMember) {
       return NextResponse.json(
         {

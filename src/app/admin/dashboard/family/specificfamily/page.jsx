@@ -1,25 +1,48 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useRouter,useSearchParams  } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Icon } from "@iconify/react";
 import MemberForm from "@/app/_components/MemberForm";
-export default function SpecificFamilyPage() {
-  const [family, setFamily] = useState(null);
-  const [addMemberModal, setAddMemberModal] = useState(false);
+import Loading from "@/app/_components/Loading";
+import MainMemberCard from "@/app/_components/Admin/MainMemberCard";
 
+export default function SpecificfamiliesPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [families, setFamilies] = useState(null);
+  const [addMemberModal, setAddMemberModal] = useState(false);
+  const [castName, setCaste] = useState(null);
   const [load, setLoad] = useState(true);
 
-  useEffect(() => {
+  const castid = searchParams.get("castid");  
+  
+  const featchCastFamilyData = async () => {
     setLoad(true);
-    // Retrieve family data from localStorage
-    const familyData = localStorage.getItem("familyData");
-    if (familyData) {
-      setFamily(JSON.parse(familyData));
+    try {
+      const response = await fetch(`/api/family/${castid}`);
+
+      if (response.ok) {
+        const result = await response.json();
+        // console.log("Response:", result);
+
+        if (result.success) {
+          const data = result.data;
+          // console.log("Data fff :", data);
+          setCaste(data.casteName);
+          setFamilies(data);
+          // localStorage.setItem("adminSelectedCaste", JSON.stringify(data));
+        }
+      } else {
+        console.error("Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoad(false);
     }
-    setLoad(false);
+  };
+
+  useEffect(() => {
+    featchCastFamilyData();
   }, []);
 
   // Toggle Modal
@@ -27,10 +50,12 @@ export default function SpecificFamilyPage() {
     setAddMemberModal(!addMemberModal);
   };
 
+
   return (
     <div>
+      {load && <Loading />}
       <div className="p-3 font-karma">
-        {/* Add Family Button */}
+        {/* Add families Button */}
         <div className="flex justify-end w-full">
           <button
             className="w-fit bg-primary text-lg text-white py-2 px-3 rounded-xl"
@@ -41,40 +66,29 @@ export default function SpecificFamilyPage() {
         </div>
       </div>
 
-      {load ? (
-        "Loadin ....."
-      ) : family?.id ? (
-        <>
-          <p>Family ID: {family.id}</p>
-          <p>Family Name: {family.name}</p>
-        </>
+      {!load && 
+       ( families?.length > 0 ? (
+        families?.map((family, index) => (
+            <MainMemberCard
+              key={index}
+              mainPerson={family.mainPerson}
+            />
+        ))
       ) : (
-        <p>No Family data available.</p>
+        <p className="font-karma text-2xl text-primary text-center">
+          No families found.
+        </p>
+      ))}
+
+      {addMemberModal && (
+        <MemberForm
+          handleModal={handleAddMember}
+          mainPerson={true}
+          casteId={castid}
+          setLoad={setLoad}
+          featchData={featchCastFamilyData}
+        />
       )}
-
-      <div className="p-3 m-3 rounded-xl font-karma h-32 bg-[#D2DDD1] flex gap-5">
-        <div className="w-32 bg-white h-full flex rounded-md"></div>
-
-        <div className="my-auto space-y-1">
-          <p>નામ : વિરુગમા કૃણાલભાઈ બળદેવભાઈ </p>
-          <p> સભ્ય સાથે સબંધ : પોતે </p>
-          <p> મોબાઈલ નંબર : 7046740595 </p>
-        </div>
-
-        <div className="space-y-1.5 flex flex-col ml-auto">
-          <button className=" text-center text-primary text-base ring-1 ring-primary w-32 py-1 px-3 rounded-md hover:text-white hover:bg-primary">
-            View
-          </button>
-          <button className=" text-primary text-base ring-1 ring-primary w-32 py-1 px-3 rounded-md text-center hover:text-white hover:bg-primary">
-            Add Member
-          </button>
-          <button className=" text-primary text-base ring-1 ring-primary w-32 py-1 px-3 rounded-md text-center hover:text-white hover:bg-primary">
-            Delete
-          </button>
-        </div>
-      </div>
-
-      {addMemberModal && <MemberForm handleAddMember={handleAddMember} />}
     </div>
   );
 }

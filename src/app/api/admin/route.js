@@ -8,7 +8,20 @@ import { serialize } from "cookie";
 export const POST = async (req) => {
   try {
     await dbConnect(); // Connect to the database
+
+    // Parse the incoming request body
     const { email, password } = await req.json();
+
+    if (!email || !password) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Email and password are required",
+        },
+        { status: 400 }
+      );
+    }
+
     // Check if the user with the provided email exists
     const user = await User.findOne({ email });
     if (!user) {
@@ -33,49 +46,41 @@ export const POST = async (req) => {
       );
     }
 
-     // Generate a token
-     const token = jwt.sign(
-        { mobile: user.id },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
-      );
-  
-      // Set the token in cookies
-      const cookie = serialize("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        maxAge: 60 * 60 * 4, 
-        path: "/",
-      });
+    // Generate a token
+    const token = jwt.sign(
+      { id: user._id }, // Payload with user ID
+      process.env.JWT_SECRET,
+      { expiresIn: "4h" } // Token expiry (4 hours)
+    );
 
-      // const userTypeCookie = serialize("userType", "admin", {
-      //   httpOnly: true,
-      //   secure: true,
-      //   sameSite: "strict",
-      //   maxAge: 60 * 60, 
-      //   path: "/",
-      // });
-
-    // Successful login
-    return NextResponse.json({
-      success: true,
-      message: "Login successful",
-      user: { name: user.name, email: user.email }, // Optionally return some user data
+    // Set the token in cookies
+    const cookie = serialize("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+      sameSite: "strict",
+      maxAge: 60 * 60 * 4, // Cookie expiry (4 hours)
+      path: "/", // Cookie path
     });
 
-    response.headers.set("Set-Cookie", cookie);
+    // Create a response and attach the cookie header
+    const response = NextResponse.json({
+      success: true,
+      message: "Login successful",
+      user: { name: user.name, email: user.email }, // Optional: Return user data
+    });
 
+    response.headers.set("Set-Cookie", cookie); // Attach the cookie to the response
 
+    return response;
   } catch (error) {
     console.error("Error processing login:", error);
 
-    // Send the error details to the frontend
+    // Return an error response
     return NextResponse.json(
       {
         success: false,
         message: "Failed to login",
-        error: error.message,
+        error: error.message, // Include error details
       },
       { status: 500 }
     );

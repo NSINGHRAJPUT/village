@@ -5,12 +5,17 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import Loading from "@/app/_components/Loading";
+import axios from "axios";
+import { Icon } from "@iconify/react";
 
 export default function FamilyPage() {
   const router = useRouter();
   const [addFamilyModal, setAddFamilyModal] = useState(false);
 
   const [familyData, setFamilyData] = useState([]);
+  const [load, setLoad] = useState(true);
 
   // Yup Schema for Validation
   const schema = yup.object().shape({
@@ -28,12 +33,54 @@ export default function FamilyPage() {
   });
 
   // Form Submission Handler
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    // Close modal after saving
-    setAddFamilyModal(false);
-    // Reset form after submission
-    reset();
+  const onSubmit = async (data) => {
+    setLoad(true);
+
+    try {
+      const response = await fetch("/api/cast", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      // console.log("Response:", result);
+
+      if (response.ok) {
+        reset();
+        toast.success("Family data saved successfully");
+        setAddFamilyModal(false);
+      }
+    } catch (error) {
+      console.error("Error Create Family data:", error);
+      toast.error("Family Not Create! Please try again.");
+    } finally {
+      setLoad(false);
+    }
+  };
+
+  const featchCastData = async () => {
+    setLoad(true);
+    try {
+      const response = await fetch("/api/cast");
+
+      if (!response.ok) {
+        toast.error("An error occurred. Please try again.");
+      }
+
+      const result = await response.json();
+      // console.log("result", result);
+      if (result.success) {
+        // console.log("Family Data:", result.data);
+        setFamilyData(result.data); // Save fetched data to state
+      }
+    } catch (error) {
+      console.error("Error fetching family data:", error);
+    } finally {
+      setLoad(false);
+    }
   };
 
   // Toggle Modal
@@ -41,31 +88,17 @@ export default function FamilyPage() {
     setAddFamilyModal(!addFamilyModal);
   };
 
-  const featchFamilyData = async () => {
-    try {
-      setFamilyData(["Family 1", "Family 2", "Family 3"]);
-    } catch (error) {
-      toast.error("An error occurred. Please try again.");
-    }
-  };
-
   useEffect(() => {
-    featchFamilyData();
+    featchCastData();
   }, []);
 
   const handleFamilyClick = (family) => {
-    // Store the family data in localStorage
-    localStorage.setItem(
-      "familyData",
-      JSON.stringify({ id: 12, name: family })
-    );
-
-    // Navigate to the specific family page
-    router.push("/admin/dashboard/family/specificfamily");
+    router.push(`/admin/dashboard/family/specificfamily?castid=${family?._id}`);
   };
 
   return (
     <div className="p-3 font-karma">
+      {load && <Loading />}
       {/* Add Family Button */}
       <div className="flex justify-end w-full">
         <button
@@ -76,17 +109,33 @@ export default function FamilyPage() {
         </button>
       </div>
 
-      <div className="grid  grid-cols-2 md:grid-cols-4  lg:grid-cols-5">
-        {familyData.map((family, index) => (
-          <div
-            key={index}
-            className="bg-[#144F0F1A] text-xl h-32 flex justify-center items-center cursor-pointer rounded-lg shadow-md m-3"
-            onClick={() => handleFamilyClick(family)}
-          >
-            {family}
+      {!load &&
+        (familyData?.length > 0 ? (
+          <div className="grid  grid-cols-2 md:grid-cols-4  lg:grid-cols-5">
+            {familyData?.map((family, index) => (
+              <div
+                key={index}
+                className="bg-[#144F0F1A] text-xl h-32 flex justify-center items-center cursor-pointer rounded-lg shadow-md m-3 relative"
+                onClick={() => handleFamilyClick(family)}
+              >
+                {family.name}
+
+                <div className="absolute top-3 right-3 bg-[#144F0F1A] h-11 w-11  text-xs font-bold rounded-full  flex justify-center items-center gap-1  text-primary">
+                  <span>
+                    <Icon icon="fluent:person-12-filled" className="text-lg" />
+                  </span>
+                  <span className="text-lg font-karma pt-[2px]">
+                    {family.totalFamilies}{" "}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
+        ) : (
+          <p className="font-karma text-2xl text-primary text-center">
+            No families found.
+          </p>
         ))}
-      </div>
 
       {/* Add Family Modal */}
       {addFamilyModal && (

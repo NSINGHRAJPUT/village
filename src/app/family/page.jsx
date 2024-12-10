@@ -7,7 +7,9 @@ async function fetchFamilies() {
     const response = await axios.get(
       `${process.env.BASE_URL}/api/getAllCasteFamilies`
     );
+    
     if (response.status === 200) {
+      // console.log("Family Data:", response.data.data);
       return response.data.data;
     }
   } catch (error) {

@@ -26,6 +26,7 @@
     "next": "14.2.5",
     "nodemailer": "^6.9.14",
     "react": "^18",
+    "react-countup": "^6.5.3",
     "react-dom": "^18",
     "react-hook-form": "^7.53.2",
     "react-hot-toast": "^2.4.1",

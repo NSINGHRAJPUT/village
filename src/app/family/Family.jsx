@@ -8,13 +8,14 @@ import { useRouter } from "next/navigation";
 import village from "../../assets/village.png";
 import About from "../_components/About";
 import { Icon } from "@iconify/react";
-
+import familyPage from "../../assets/familyPage.jpg";
 export default function FamilyPage({ families }) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
   };
+
   // Handle selecting a specific family and saving it to local storage
   const handleFamilyClick = (family) => {
     // Save the selected family to local storage
@@ -30,7 +31,7 @@ export default function FamilyPage({ families }) {
       try {
         const response = await fetch("api/getAllCasteFamilies");
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         console.error("Error fetching family data:", error);
       }
@@ -45,34 +46,37 @@ export default function FamilyPage({ families }) {
       </div>
       <div className="relative text-white py-16 px-4 text-center min-h-[90vh] pt-[15vh]">
         <Image
-          src={village}
+          src={familyPage}
           alt="Village Background"
           layout="fill"
           objectFit="cover"
           className="z-[-1]" // To make sure it sits behind other content
         />
         <div className="absolute z-10 top-0 left-0 w-full h-full bg-[#144F0F80] text-white"></div>
+        
+          
+          <h1 className="text-2xl md:text-4xl z-20 font-karma font-bold absolute bottom-24 left-1/2 transform -translate-x-1/2 w-full">
+           <div className="bg-primary m-3 p-4 rounded-lg ring-[1px] ring-white">
+            કમાલપુર પટેલ પરિવાર અમદાવાદ
+            </div>
+          </h1>
+       
 
-        <h1 className="text-4xl relative z-20 mt-16 font-bold mb-4">
-          Find Your Family
-        </h1>
-        <p className="text-xl relative z-20 mb-8">
+        {/* <p className="text-xl relative z-20 mb-8">
           Search for family members by caste
-        </p>
-        <input
+        </p> */}
+        {/* <input
           type="text"
           value={searchQuery}
           onChange={handleSearch}
           className="p-2 relative z-20 rounded border outline-none border-gray-300 text-black"
           placeholder="Search by caste"
-        />
+        /> */}
       </div>
 
       {/* Castes Section */}
       <div className="mx-auto w-[90%] md:w-[85%] lg:w-[80%] py-8 px-4">
-        <h2 className="text-3xl text-center md:text-4xl break-words font-bold mb-6 text-primary font-karma">
-          Family
-        </h2>
+    
         {families?.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {families
@@ -111,9 +115,10 @@ export default function FamilyPage({ families }) {
               ))}
           </div>
         ) : (
-        <p className="font-karma text-2xl text-primary text-center">No families found.</p>
+          <p className="font-karma text-2xl text-primary text-center">
+            No families found.
+          </p>
         )}
-
       </div>
     </div>
   );
