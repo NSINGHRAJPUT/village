@@ -13,7 +13,8 @@ import { Icon } from "@iconify/react";
 export default function FamilyPage() {
   const router = useRouter();
   const [addFamilyModal, setAddFamilyModal] = useState(false);
-
+  const [editMode, setEditMode] = useState(false);
+  const [selectedFamily, setSelectedFamily] = useState(null);
   const [familyData, setFamilyData] = useState([]);
   const [load, setLoad] = useState(true);
 
@@ -28,40 +29,12 @@ export default function FamilyPage() {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema), // Connect Yup validation
   });
 
-  // Form Submission Handler
-  const onSubmit = async (data) => {
-    setLoad(true);
-
-    try {
-      const response = await fetch("/api/cast", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-      // console.log("Response:", result);
-
-      if (response.ok) {
-        reset();
-        toast.success("Family data saved successfully");
-        setAddFamilyModal(false);
-      }
-    } catch (error) {
-      console.error("Error Create Family data:", error);
-      toast.error("Family Not Create! Please try again.");
-    } finally {
-      setLoad(false);
-    }
-  };
-
-  const featchCastData = async () => {
+  const fetchCastData = async () => {
     setLoad(true);
     try {
       const response = await fetch("/api/cast");
@@ -71,9 +44,7 @@ export default function FamilyPage() {
       }
 
       const result = await response.json();
-      // console.log("result", result);
       if (result.success) {
-        // console.log("Family Data:", result.data);
         setFamilyData(result.data); // Save fetched data to state
       }
     } catch (error) {
@@ -83,13 +54,105 @@ export default function FamilyPage() {
     }
   };
 
+  // Form Submission Handler
+  const onSubmit = async (data) => {
+  
+    setLoad(true);
+    try {
+      if (editMode) {
+        // Update existing family
+
+        console.log("data", data);
+        
+        const response = await fetch("/api/cast", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...data, id: selectedFamily._id }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          toast.success("Family data updated successfully");
+          setAddFamilyModal(false);
+          setEditMode(false);
+          fetchCastData();
+        }
+      } else {
+        // Create new family
+        const response = await fetch("/api/cast", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          reset();
+          toast.success("Family data saved successfully");
+          setAddFamilyModal(false);
+          fetchCastData();
+        }
+      }
+    } catch (error) {
+      console.error("Error saving family data:", error);
+      toast.error("Operation failed! Please try again.");
+    } finally {
+      setLoad(false);
+    }
+  };
+
+  // Delete Family Handler
+  const handleDeleteFamily = async (id) => {
+    const confirmDelete = confirm("Are you sure you want to delete this family?");
+    if (!confirmDelete) return;
+
+    setLoad(true);
+    try {
+      const response = await fetch("/api/cast", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        toast.success("Family deleted successfully");
+        fetchCastData();
+      }
+    } catch (error) {
+      console.error("Error deleting family data:", error);
+      toast.error("Failed to delete family. Please try again.");
+    } finally {
+      setLoad(false);
+    }
+  };
+
   // Toggle Modal
   const handleAddFamilyModal = () => {
+    reset();
+    setEditMode(false);
+    setSelectedFamily(null);
     setAddFamilyModal(!addFamilyModal);
   };
 
+  const handleEditFamily = (family) => {
+    setEditMode(true);
+    setSelectedFamily(family);
+    setValue("familyName", family.name);
+    setAddFamilyModal(true);
+  };
+
   useEffect(() => {
-    featchCastData();
+    fetchCastData();
   }, []);
 
   const handleFamilyClick = (family) => {
@@ -116,18 +179,23 @@ export default function FamilyPage() {
               <div
                 key={index}
                 className="bg-[#144F0F1A] text-xl h-32 flex justify-center items-center cursor-pointer rounded-lg shadow-md m-3 relative"
-                onClick={() => handleFamilyClick(family)}
               >
-                {family.name}
-
-                <div className="absolute top-3 right-3 bg-[#144F0F1A] h-11 w-11  text-xs font-bold rounded-full  flex justify-center items-center gap-1  text-primary">
-                  <span>
-                    <Icon icon="fluent:person-12-filled" className="text-lg" />
-                  </span>
-                  <span className="text-lg font-karma pt-[2px]">
-                    {family.totalFamilies}{" "}
-                  </span>
+                <div onClick={() => handleFamilyClick(family)}>{family.name}</div>
+                <div className="absolute top-3 right-3 flex items-center gap-2">
+                  <button
+                    onClick={() => handleEditFamily(family)}
+                    className="text-primary"
+                  >
+                    <Icon icon="ic:baseline-edit" className="text-lg" />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteFamily(family._id)}
+                    className="text-red-500"
+                  >
+                    <Icon icon="ic:baseline-delete" className="text-lg" />
+                  </button>
                 </div>
+
               </div>
             ))}
           </div>
@@ -137,11 +205,13 @@ export default function FamilyPage() {
           </p>
         ))}
 
-      {/* Add Family Modal */}
+      {/* Add/Edit Family Modal */}
       {addFamilyModal && (
         <div className="fixed bg-[#00000080] h-full w-full top-0 left-0">
           <div className="w-[50%] bg-white rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-5">
-            <h3 className="text-2xl font-semibold text-primary">Add Family</h3>
+            <h3 className="text-2xl font-semibold text-primary">
+              {editMode ? "Edit Family" : "Add Family"}
+            </h3>
 
             {/* Form */}
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -159,7 +229,7 @@ export default function FamilyPage() {
                       errors.familyName ? "ring-red-500" : "ring-primary"
                     }`}
                     placeholder="Enter Family Name"
-                    {...register("familyName")} // Bind to useForm
+                    {...register("familyName")}
                   />
 
                   <div className="h-2 w-full">
@@ -171,8 +241,6 @@ export default function FamilyPage() {
                   </div>
                 </div>
               </div>
-
-              {/* Validation Error */}
 
               {/* Buttons */}
               <div className="flex justify-end gap-5 font-semibold mt-5">
@@ -187,7 +255,7 @@ export default function FamilyPage() {
                   type="submit"
                   className="w-32 text-center ring-1 ring-primary bg-primary text-lg text-white py-2 px-3 rounded-xl"
                 >
-                  Save
+                  {editMode ? "Update" : "Save"}
                 </button>
               </div>
             </form>

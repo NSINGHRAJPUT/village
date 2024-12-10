@@ -16,22 +16,22 @@ try {
 
 // async function addDefaultUser() {
 //   try {
-//     const existingUser = await User.findOne({ email: "neeraj.singh@example.com" });
+//     const existingUser = await User.findOne({ email: "kamalpurahmedabad@gmail.com" });
 //     if (!existingUser) {
-//       const hashedPassword = await bcrypt.hash("Neeraj@2610", 10); 
+//       const hashedPassword = await bcrypt.hash("Kamalpur@2024", 10); 
 //       await User.create({
-//         name: "Neeraj Singh Rajput",
-//         email: "nsinghrajputx@gmail.com",
+//         name: "Kamalpur Ahmedabad",
+//         email: "kamalpurahmedabad@gmail.com",
 //         password: hashedPassword,
 //       });
-//       console.log("Default user 'Neeraj Singh Rajput' added.");
+//       console.log("Default user 'Admin' added.");
 //     }
 //   } catch (error) {
 //     console.error("Error adding default user:", error);
 //   }
 // }
 
-// Call the function on server start
 // addDefaultUser();
+// Call the function on server start
 
 module.exports = User;

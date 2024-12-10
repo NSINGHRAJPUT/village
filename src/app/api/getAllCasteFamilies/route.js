@@ -70,7 +70,7 @@ export const GET = async (req) => {
     ]);
     
 
-    if (!castesWithFamiliesAndMembers.length) {
+    if (!castesWithFamiliesAndMembers) {
       return NextResponse.json(
         { success: false, message: "No castes found" },
         { status: 404 }

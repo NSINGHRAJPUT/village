@@ -1,12 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname , useRouter } from "next/navigation";
 import { useState } from "react";
-import { Toaster } from "react-hot-toast";
+import { Toaster , toast} from "react-hot-toast";
+import { Icon } from "@iconify/react";  
+
 
 export default function DashboardLayout({ children }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [headerName, setHeaderName] = useState("Dashboard");
 
 
@@ -14,6 +17,15 @@ export default function DashboardLayout({ children }) {
     { path: "/admin/dashboard", label: "Dashboard" },
     { path: "/admin/dashboard/family", label: "Family" },
   ];
+
+  const logout = async () => {  
+   // Clear the token by setting an empty value and setting max-age to 0
+   document.cookie = "token=; path=/; max-age=0;";  // Remove token cookie
+   // Optionally, show a success message
+   toast.success("Logged out successfully!");
+   // Redirect to the login page
+   router.push("/admin");  // Redirecting to login page 
+  };
 
   return (
     <div className="w-full flex gap-5 min-h-screen p-5 relative">
@@ -43,7 +55,14 @@ export default function DashboardLayout({ children }) {
       </div>
       {/* Main Content */}
       <div className="w-[80%] space-y-5">
-        <div className="bg-[#144F0F1A] h-[10vh] rounded-2xl flex items-center text-2xl font-bold text-primary px-2"> {headerName}</div>
+        <div className="bg-[#144F0F1A] h-[10vh] rounded-2xl flex items-center text-2xl font-bold text-primary px-4 justify-between"> 
+        
+          <p> {headerName} </p>
+          <p > <Icon icon="ic:baseline-logout" className="text-xl cursor-pointer" 
+
+            onClick={logout}
+          />  </p>
+        </div>
         <div className="bg-[#144F0F1A] h-[81vh] rounded-2xl">{children}</div>
       </div>
     </div>

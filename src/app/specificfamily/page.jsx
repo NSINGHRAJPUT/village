@@ -162,7 +162,7 @@ export default function SpecificFamily() {
             <p>
               બ્લડ ગુપ :-{" "}
               <span className="font-normal text-[#144F0FB3]">
-                {selectedMember?.bloodGroup}
+                {selectedMember?.bloodGroup === "No" ? "-" : selectedMember?.bloodGroup} 
               </span>
             </p>
           </div>
